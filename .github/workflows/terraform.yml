@@ -101,7 +101,7 @@ jobs:
         terraform_version: $TERRAFORM_VERSION
   
     - name: Download Terraform Plan
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v7
       with:
         name: terraform-plan
     - name: Terraform Init
