@@ -1,6 +1,6 @@
 # https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax
 
-name: Create Release
+name: Release
 
 on:
   push:
@@ -8,10 +8,8 @@ on:
       - "v*.*.*"
 
 permissions:
-  # pull-requests: write
-  contents: read
-  actions: read
-
+  contents: write
+  
 jobs:
   tf-release:
     runs-on: ubuntu-latest
