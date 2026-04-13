@@ -1,0 +1,25 @@
+# https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax
+
+name: Create Release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+permissions:
+  # pull-requests: write
+  contents: read
+  actions: read
+
+jobs:
+  tf-release:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: git-checkout
+      uses: actions/checkout@v6
+
+    - name: Release
+      uses: softprops/action-gh-release@v3
+      if: github.ref_type == 'tag'

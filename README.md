@@ -9,4 +9,4 @@
 
 <!-- Show latest release status -->
 
-![Release](https://github.com/andrzejricoh/actions-test/actions/workflows/terraform.yml/badge.svg?branch=main&event=release)
+![Release](https://github.com/andrzejricoh/actions-test/actions/workflows/release.yml/badge.svg?branch=main&event=release)

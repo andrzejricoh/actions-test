@@ -113,6 +113,3 @@ jobs:
         ls -la
         terraform -version
         terraform apply -no-color -input=false -auto-approve $TFPLAN_NAME
-    - name: Release
-      uses: softprops/action-gh-release@v3
-      if: github.ref_type == 'tag'
