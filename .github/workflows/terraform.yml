@@ -56,7 +56,7 @@ jobs:
         echo "Version: $VERSION_TAG"
 
     - name: test_script
-      uses: actions/github-script@v9.0.0
+      uses: actions/github-script@v9
       with:
         # github-token: ${{secrets.GITHUB_TOKEN}}
         script: |
@@ -69,7 +69,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: git-checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
 
     - name: terraform-setup
       uses: hashicorp/setup-terraform@v4
@@ -87,7 +87,7 @@ jobs:
 
     - name: Cache Terraform plugins
       id: terraform-cache
-      uses: actions/cache@v4
+      uses: actions/cache@v5
       with:
         path: .terraform
         key: ${{ runner.os }}-terraform-${{ hashFiles('**/.terraform.lock.hcl') }}
@@ -107,7 +107,7 @@ jobs:
       run: terraform plan -no-color -input=false -out $TFPLAN_NAME
 
     - name: Upload Terraform Plan
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: terraform-plan
         # name: terraform-plan-${{ matrix.tfversion }}
@@ -121,7 +121,7 @@ jobs:
     - tf-build
     steps:
     - name: List and manage artifacts
-      uses: actions/github-script@v7
+      uses: actions/github-script@v9
       with:
         script: |
           // List artifacts for this repository
@@ -136,7 +136,7 @@ jobs:
           }
 
     - name: git-checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
 
     - name: terraform-setup
       uses: hashicorp/setup-terraform@v4
