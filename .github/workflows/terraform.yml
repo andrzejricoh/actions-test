@@ -11,6 +11,7 @@ env:
   NODE_VERSION: "20"
   TFPLAN_NAME: plan.tfplan
   ARM_ACCESS_KEY: ${{ secrets.ARM_ACCESS_KEY }}
+  TERRAFORM_VERSION: "1.14"
 
 permissions:
   # pull-requests: write
@@ -62,9 +63,9 @@ jobs:
           console.log('kapusta')
 
   tf-build:
-    strategy:
-      matrix:
-        tfversion: [ "1.12", "1.14" ]
+    # strategy:
+    #   matrix:
+    #     tfversion: [ "1.12", "1.14" ]
     runs-on: ubuntu-latest
     steps:
     - name: git-checkout
@@ -73,7 +74,8 @@ jobs:
     - name: terraform-setup
       uses: hashicorp/setup-terraform@v4
       with:
-        terraform_version: ${{ matrix.tfversion }}
+        terraform_version: $TERRAFORM_VERSION
+        # terraform_version: ${{ matrix.tfversion }}
   
     - name: Terraform fmt
       id: fmt
@@ -138,7 +140,7 @@ jobs:
     - name: terraform-setup
       uses: hashicorp/setup-terraform@v4
       with:
-        terraform_version: "1.14"
+        terraform_version: $TERRAFORM_VERSION
   
     - name: Download Terraform Plan
       uses: actions/download-artifact@v4
