@@ -109,7 +109,8 @@ jobs:
     - name: Upload Terraform Plan
       uses: actions/upload-artifact@v4
       with:
-        name: terraform-plan-${{ matrix.tfversion }}
+        name: terraform-plan
+        # name: terraform-plan-${{ matrix.tfversion }}
         path: |
           *.tfplan
 
@@ -145,7 +146,7 @@ jobs:
     - name: Download Terraform Plan
       uses: actions/download-artifact@v4
       with:
-        name: terraform-plan-1.14
+        name: terraform-plan
     - name: Terraform Init
       id: init
       run: terraform init -input=false
