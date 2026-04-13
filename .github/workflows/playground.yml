@@ -9,6 +9,13 @@ permissions:
   contents: read
   actions: read
 
+# env var templating
+env:
+  APP_VERSION: ${{ github.ref_name }}
+  BUILD_ID: ${{ github.run_number }}
+  FULL_VERSION: ${{ github.ref_name }}-build.${{ github.run_number }}
+  CONTAINER_TAG: ${{ github.repository }}:${{ github.ref_name }}
+
 jobs:
   vars-test:
     name: vars-test
@@ -40,18 +47,78 @@ jobs:
         echo "BUILD_NUMBER=$BUILD_NUMBER" >> $GITHUB_ENV
         echo "VERSION_TAG=$VERSION_TAG" >> $GITHUB_ENV
 
+    - name: Set environment-specific variables
+      run: |
+        if [ "$GITHUB_REF" = "refs/heads/main" ]; then
+            echo "LOG_LEVEL=info" >> $GITHUB_ENV
+            echo "CACHE_TTL=3600" >> $GITHUB_ENV
+        elif [ "$GITHUB_REF" = "refs/heads/develop" ]; then
+            echo "LOG_LEVEL=debug" >> $GITHUB_ENV
+            echo "CACHE_TTL=300" >> $GITHUB_ENV
+        else
+            echo "LOG_LEVEL=warn" >> $GITHUB_ENV
+            echo "CACHE_TTL=60" >> $GITHUB_ENV
+        fi
+
     - name: Use generated variables
       run: |
         echo "Build Date: $BUILD_DATE"
         echo "Build Number: $BUILD_NUMBER"
         echo "Version: $VERSION_TAG"
+        echo "Log level: $LOG_LEVEL"
+        echo "Cache TTL: $CACHE_TTL"
+
+    - name: Example variable validation
+      run: |
+        required_vars=("API_URL" "DATABASE_HOST" "ENVIRONMENT")
+
+        for var in "${required_vars[@]}"; do
+            if [ -z "${!var}" ]; then
+            echo "ERROR: Required environment variable $var is not set"
+            exit 1
+            else
+            echo "OK: $var is set"
+            fi
+        done
 
     - name: test_script
       uses: actions/github-script@v9
       with:
-        # github-token: ${{secrets.GITHUB_TOKEN}}
         script: |
           console.log('kapusta')
+
+  artifacts-test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: generate artifact
+      run: echo "sample data" > appdata.cfg
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v7
+      with:
+        name: appdata-${{ github.sha }}
+        path: |
+          *.cfg
+        retention-days: 1  
+
+    - name: List and manage artifacts
+      uses: actions/github-script@v9
+      with:
+        script: |
+          // List artifacts for this repository
+          const artifacts = await github.rest.actions.listArtifactsForRepo({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+          });
+
+          console.log(`Found ${artifacts.data.total_count} artifacts`);
+          for (const artifact of artifacts.data.artifacts) {
+            console.log(`Artifact: ${artifact.name}`);
+          }
+
+          console.log(artifacts)
+          console.log(artifacts.data)
 
   matrix-test:
     strategy:

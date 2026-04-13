@@ -22,10 +22,8 @@ permissions:
 
 jobs:
   tf-build:
-    # strategy:
-    #   matrix:
-    #     tfversion: [ "1.12", "1.14" ]
     runs-on: ubuntu-latest
+
     steps:
     - name: git-checkout
       uses: actions/checkout@v6
