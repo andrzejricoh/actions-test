@@ -70,7 +70,7 @@ jobs:
 
     - name: Example variable validation
       run: |
-        required_vars=("APP_VERSION" "BUILD_ID" "FULL_VERSION")
+        required_vars=("APP_VERSIONx" "BUILD_ID" "FULL_VERSION")
 
         for var in "${required_vars[@]}"; do
             if [ -z "${!var}" ]; then
