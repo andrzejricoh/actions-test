@@ -1,6 +1,6 @@
 # https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax
 
-name: Infrastructure Deployment
+name: Infra Deploy
 
 on:
   push:
