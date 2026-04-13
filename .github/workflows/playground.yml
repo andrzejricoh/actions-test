@@ -70,7 +70,7 @@ jobs:
 
     - name: Example variable validation
       run: |
-        required_vars=("API_URL" "DATABASE_HOST" "ENVIRONMENT")
+        required_vars=("APP_VERSION" "BUILD_ID" "FULL_VERSION")
 
         for var in "${required_vars[@]}"; do
             if [ -z "${!var}" ]; then
@@ -115,6 +115,7 @@ jobs:
           console.log(`Found ${artifacts.data.total_count} artifacts`);
           for (const artifact of artifacts.data.artifacts) {
             console.log(`Artifact: ${artifact.name}`);
+            console.log(artifact.workflow_run)
           }
 
           console.log(artifacts)
