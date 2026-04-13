@@ -1,8 +1,10 @@
-name: CI Pipeline
+# https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax
+
+name: Infrastructure Deployment
 
 on:
   push:
-    branches: ['**']
+    branches: ['main']
   pull_request:
     branches: [main]
 
@@ -19,49 +21,6 @@ permissions:
   actions: read
 
 jobs:
-  vars-test:
-    name: vars-test
-    runs-on: ubuntu-latest
-    # container:
-    #   image: registry.gitlab.com/iac58/andrzej/gitlab-runner-images/iac:latest
-    #   options: --user 0
-    env:
-      job_env_var: ${{ vars.ORG_LEVEL_VAR }}
-    steps:
-    - name: Display workflow context
-      run: |
-        echo "Workflow: $GITHUB_WORKFLOW"
-        echo "Repository: $GITHUB_REPOSITORY"
-        echo "Branch: ${GITHUB_REF#refs/heads/}"
-        echo "Commit: $GITHUB_SHA"
-        echo "Actor: $GITHUB_ACTOR"
-        echo "Event: $GITHUB_EVENT_NAME"
-        echo "Runner OS: $RUNNER_OS"
-
-    - name: Generate build metadata
-      id: metadata
-      run: |
-        BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
-        BUILD_NUMBER=$GITHUB_RUN_NUMBER
-        VERSION_TAG=${GITHUB_REF#refs/tags/}
-
-        echo "BUILD_DATE=$BUILD_DATE" >> $GITHUB_ENV
-        echo "BUILD_NUMBER=$BUILD_NUMBER" >> $GITHUB_ENV
-        echo "VERSION_TAG=$VERSION_TAG" >> $GITHUB_ENV
-
-    - name: Use generated variables
-      run: |
-        echo "Build Date: $BUILD_DATE"
-        echo "Build Number: $BUILD_NUMBER"
-        echo "Version: $VERSION_TAG"
-
-    - name: test_script
-      uses: actions/github-script@v9
-      with:
-        # github-token: ${{secrets.GITHUB_TOKEN}}
-        script: |
-          console.log('kapusta')
-
   tf-build:
     # strategy:
     #   matrix:
