@@ -65,7 +65,7 @@ jobs:
         - os: ubuntu-latest
           command: "ls -la"
         - os: windows-latest
-          command: "dir /q"
+          command: "Get-ChildItem"
     runs-on: ${{ matrix.os }}
     
     steps:
