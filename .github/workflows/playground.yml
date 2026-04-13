@@ -115,6 +115,7 @@ jobs:
           console.log(`Found ${artifacts.data.total_count} artifacts`);
           for (const artifact of artifacts.data.artifacts) {
             console.log(`Artifact: ${artifact.name}`);
+            console.log(artifact.workflow_run)
           }
 
           console.log(artifacts)
