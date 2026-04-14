@@ -35,6 +35,11 @@ jobs:
         echo "Actor: $GITHUB_ACTOR"
         echo "Event: $GITHUB_EVENT_NAME"
         echo "Runner OS: $RUNNER_OS"
+    
+    - name: Show some software versions
+      run: |
+        go version || echo "go not installed"
+        python ==version || echo "python not installed"
 
     - name: Generate build metadata
       id: metadata
